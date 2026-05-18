@@ -1,0 +1,50 @@
+name: WordPress WPScan
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  wpscan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build and start WordPress
+        run: |
+          docker compose -f docker/docker-compose.yml up -d --build
+
+      - name: Wait for WordPress
+        run: |
+          echo "Waiting for WordPress to start..."
+          for i in {1..30}; do
+            if curl -s http://localhost:8080 | grep -q "<title>"; then
+              echo "WordPress is ready."
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "WordPress did not start in time."
+          exit 1
+
+      - name: Run WPScan
+        env:
+          WPSCAN_API_TOKEN: ${{ secrets.WPSCAN_API_TOKEN }}
+        run: |
+          mkdir -p scans
+          TS=$(date +"%Y%m%d-%H%M%S")
+          docker run --rm --network host wpscanteam/wpscan \
+            --url http://localhost:8080 \
+            --enumerate u,vp,vt,tt \
+            --plugins-detection aggressive \
+            --api-token "$WPSCAN_API_TOKEN" \
+            --no-update --force | tee "scans/wpscan-${TS}.txt"
+
+      - name: Upload scan artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: wpscan-results
+          path: scans/
