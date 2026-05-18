@@ -30,19 +30,30 @@ jobs:
           echo "WordPress did not start in time."
           exit 1
 
-      - name: Wait for plugin install
+      - name: Install WordPress and plugins (wp-cli)
         run: |
-          echo "Waiting for wp-cli to install plugins..."
+          echo "Waiting for database..."
           for i in {1..30}; do
-            if docker logs docker-wp-cli-1 | grep -q "WP-CLI plugins installed"; then
-              echo "Plugins installed."
-              exit 0
+            if docker exec docker-wp-cli-1 wp db check --allow-root >/dev/null 2>&1; then
+              echo "Database is ready."
+              break
             fi
             sleep 5
           done
-          echo "Plugins were not installed in time."
-          docker logs docker-wp-cli-1 || true
-          exit 1
+          docker exec docker-wp-cli-1 wp db check --allow-root
+
+          if ! docker exec docker-wp-cli-1 wp core is-installed --allow-root >/dev/null 2>&1; then
+            docker exec docker-wp-cli-1 wp core install \
+              --url="http://localhost:8080" \
+              --title="WP Scan Lab" \
+              --admin_user="${WP_ADMIN_USER:-admin}" \
+              --admin_password="${WP_ADMIN_PASSWORD:-admin123!}" \
+              --admin_email="${WP_ADMIN_EMAIL:-admin@example.com}" \
+              --skip-email --allow-root
+          fi
+
+          docker exec docker-wp-cli-1 wp plugin install contact-form-7 --version=5.3.2 --allow-root --activate
+          docker exec docker-wp-cli-1 wp plugin install hello-dolly --version=1.7.2 --allow-root --activate
 
       - name: Run WPScan
         env:
