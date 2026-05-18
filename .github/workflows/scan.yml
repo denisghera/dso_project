@@ -52,7 +52,7 @@ jobs:
             --api-token "$WPSCAN_API_TOKEN" \
             --format json \
             --output "/output/wpscan-${TS}.json" \
-            --no-color --no-update --force
+            --no-update --force
 
       - name: Upload scan artifact
         uses: actions/upload-artifact@v4
