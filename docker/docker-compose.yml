@@ -48,7 +48,7 @@ services:
       set -e;
       if [ ! -f /var/www/html/wp-settings.php ]; then
         echo 'Downloading WordPress core...';
-        wp core download --version=6.0.3 --allow-root;
+        wp core download --version=6.0.3 --force --allow-root;
       fi;
       if [ ! -f /var/www/html/wp-config.php ]; then
         echo 'Creating wp-config.php...';
