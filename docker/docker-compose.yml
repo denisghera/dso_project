@@ -31,6 +31,7 @@ services:
 
   wp-cli:
     image: wordpress:cli-php7.4
+    container_name: wp-cli-setup # Added for predictable CI targeting
     depends_on:
       - wordpress
     working_dir: /var/www/html
@@ -40,6 +41,9 @@ services:
       WORDPRESS_DB_USER: ${MYSQL_USER}
       WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
       WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
+      WP_ADMIN_USER: ${WP_ADMIN_USER}
+      WP_ADMIN_PASSWORD: ${WP_ADMIN_PASSWORD}
+      WP_ADMIN_EMAIL: ${WP_ADMIN_EMAIL}
     volumes:
       - wp_data:/var/www/html
     entrypoint: /bin/sh
@@ -48,7 +52,7 @@ services:
       set -e;
       if [ ! -f /var/www/html/wp-settings.php ]; then
         echo 'Waiting for WordPress files...';
-        for i in $(seq 1 30); do
+        for i in $$(seq 1 30); do
           if [ -f /var/www/html/wp-settings.php ]; then
             echo 'WordPress files are ready.';
             break;
@@ -58,10 +62,10 @@ services:
       fi;
       if [ ! -f /var/www/html/wp-config.php ]; then
         echo 'Creating wp-config.php...';
-        wp config create --dbname="${MYSQL_DATABASE}" --dbuser="${MYSQL_USER}" --dbpass="${MYSQL_PASSWORD}" --dbhost="${WORDPRESS_DB_HOST}" --allow-root;
+        wp config create --dbname=\"${MYSQL_DATABASE}\" --dbuser=\"${MYSQL_USER}\" --dbpass=\"${MYSQL_PASSWORD}\" --dbhost=\"${WORDPRESS_DB_HOST}\" --allow-root;
       fi;
       echo 'Waiting for database...';
-      for i in $(seq 1 30); do
+      for i in $$(seq 1 30); do
         if wp db check --allow-root >/dev/null 2>&1; then
           echo 'Database is ready.';
           break;
@@ -74,11 +78,11 @@ services:
       fi;
       if ! wp core is-installed --allow-root >/dev/null 2>&1; then
         echo 'Installing WordPress...';
-        wp core install --url='http://localhost:8080' --title='WP Scan Lab' --admin_user="${WP_ADMIN_USER}" --admin_password="${WP_ADMIN_PASSWORD}" --admin_email="${WP_ADMIN_EMAIL}" --skip-email --allow-root;
+        wp core install --url='http://localhost:8080' --title='WP Scan Lab' --admin_user=\"${WP_ADMIN_USER}\" --admin_password=\"${WP_ADMIN_PASSWORD}\" --admin_email=\"${WP_ADMIN_EMAIL}\" --skip-email --allow-root;
       fi;
       wp plugin install contact-form-7 --version=5.3.2 --allow-root --activate;
       wp plugin install hello-dolly --version=1.7.2 --allow-root --activate;
-      echo 'WP-CLI plugins installed.';
+      echo 'WP-CLI plugins installed successfully.';
       "
 
 volumes:

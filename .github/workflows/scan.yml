@@ -13,47 +13,26 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Prepare environment variables
+        run: |
+          cp .env.example .env
+
       - name: Build and start WordPress
         run: |
-          docker compose -f docker/docker-compose.yml up -d --build
+          docker compose --env-file .env -f docker/docker-compose.yml up -d --build
 
-      - name: Wait for WordPress
+      - name: Wait for WP-CLI automated setup to complete
         run: |
-          echo "Waiting for WordPress to start..."
-          for i in {1..30}; do
-            if curl -s http://localhost:8080 | grep -q "<title>"; then
-              echo "WordPress is ready."
-              exit 0
-            fi
-            sleep 5
-          done
-          echo "WordPress did not start in time."
-          exit 1
-
-      - name: Install WordPress and plugins (wp-cli)
-        run: |
-          echo "Waiting for database..."
-          for i in {1..30}; do
-            if docker exec docker-wp-cli-1 wp db check --allow-root >/dev/null 2>&1; then
-              echo "Database is ready."
-              break
-            fi
-            sleep 5
-          done
-          docker exec docker-wp-cli-1 wp db check --allow-root
-
-          if ! docker exec docker-wp-cli-1 wp core is-installed --allow-root >/dev/null 2>&1; then
-            docker exec docker-wp-cli-1 wp core install \
-              --url="http://localhost:8080" \
-              --title="WP Scan Lab" \
-              --admin_user="${WP_ADMIN_USER:-admin}" \
-              --admin_password="${WP_ADMIN_PASSWORD:-admin123!}" \
-              --admin_email="${WP_ADMIN_EMAIL:-admin@example.com}" \
-              --skip-email --allow-root
+          echo "Waiting for the wp-cli-setup container to finish..."
+          EXIT_CODE=$(docker wait wp-cli-setup)
+          
+          if [ "$EXIT_CODE" -ne 0 ]; then
+            echo "Setup failed! Fetching logs..."
+            docker logs wp-cli-setup
+            exit 1
+          else
+            echo "WordPress and plugins are fully installed!"
           fi
-
-          docker exec docker-wp-cli-1 wp plugin install contact-form-7 --version=5.3.2 --allow-root --activate
-          docker exec docker-wp-cli-1 wp plugin install hello-dolly --version=1.7.2 --allow-root --activate
 
       - name: Run WPScan
         env:

@@ -7,42 +7,49 @@ This repo contains a containerized WordPress lab for vulnerability discovery and
 1) Create your local env file:
 
 ```bash
-copy .env.example .env
+cp .env.example .env
 ```
 
 2) Start the stack:
 
 ```bash
-docker compose -f docker/docker-compose.yml down -v
-docker compose -f docker/docker-compose.yml up -d --build
+docker compose --env-file .env -f docker/docker-compose.yml down -v
+docker compose --env-file .env -f docker/docker-compose.yml up -d --build
 ```
 
 3) Check that WordPress and plugins are installed:
 
+Wait for the setup container to finish configuring the environment:
+
 ```bash
-docker logs docker-wp-cli-1
-docker exec -it docker-wordpress-1 bash -lc "wp plugin list --allow-root"
+docker logs -f wp-cli-setup
+```
+
+To list the installed plugins after setup is complete:
+
+```bash
+docker compose --env-file .env -f docker/docker-compose.yml run --rm wp-cli wp plugin list --allow-root
 ```
 
 ## Manual WPScan (local)
 
 ```bash
 docker run -it --rm --network host wpscanteam/wpscan \
-	--url http://localhost:8080 \
-	--enumerate u,vp,vt,tt \
-	--plugins-detection aggressive \
-	--no-update --force
+    --url http://localhost:8080 \
+    --enumerate u,vp,vt,tt \
+    --plugins-detection aggressive \
+    --no-update --force
 ```
 
 With API token:
 
 ```bash
 docker run -it --rm --network host wpscanteam/wpscan \
-	--url http://localhost:8080 \
-	--enumerate u,vp,vt,tt \
-	--plugins-detection aggressive \
-	--api-token YOUR_TOKEN \
-	--no-update --force
+    --url http://localhost:8080 \
+    --enumerate u,vp,vt,tt \
+    --plugins-detection aggressive \
+    --api-token YOUR_TOKEN \
+    --no-update --force
 ```
 
 ## GitHub Actions
@@ -55,5 +62,5 @@ Workflow path:
 
 ## Notes
 
-- Local secrets are stored in `.env` (ignored by git).
-- Scan output artifacts are saved under `scans/` in CI.
+* Local secrets are stored in `.env` (ignored by git).
+* Scan output artifacts are saved under `scans/` in CI.
