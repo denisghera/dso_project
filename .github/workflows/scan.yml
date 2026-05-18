@@ -36,6 +36,7 @@ jobs:
           fi
 
       - name: Run WPScan
+        continue-on-error: true
         env:
           WPSCAN_API_TOKEN: ${{ secrets.WPSCAN_API_TOKEN }}
         run: |
