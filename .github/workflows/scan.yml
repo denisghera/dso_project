@@ -29,6 +29,7 @@ jobs:
           if [ "$EXIT_CODE" -ne 0 ]; then
             echo "Setup failed! Fetching logs..."
             docker logs wp-cli-setup
+            docker logs docker-db-1
             exit 1
           else
             echo "WordPress and plugins are fully installed!"
@@ -39,13 +40,18 @@ jobs:
           WPSCAN_API_TOKEN: ${{ secrets.WPSCAN_API_TOKEN }}
         run: |
           mkdir -p scans
+          chmod 777 scans
           TS=$(date +"%Y%m%d-%H%M%S")
-          docker run --rm --network host wpscanteam/wpscan \
+          
+          docker run --rm --network host \
+            -v "$(pwd)/scans:/output" \
+            wpscanteam/wpscan \
             --url http://localhost:8080 \
             --enumerate u,vp,vt,tt \
             --plugins-detection aggressive \
             --api-token "$WPSCAN_API_TOKEN" \
-            --format json --output "scans/wpscan-${TS}.json" \
+            --format json \
+            --output "/output/wpscan-${TS}.json" \
             --no-color --no-update --force
 
       - name: Upload scan artifact
