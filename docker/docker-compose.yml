@@ -47,8 +47,14 @@ services:
       -lc "
       set -e;
       if [ ! -f /var/www/html/wp-settings.php ]; then
-        echo 'Downloading WordPress core...';
-        wp core download --version=6.0.3 --force --allow-root;
+        echo 'Waiting for WordPress files...';
+        for i in $(seq 1 30); do
+          if [ -f /var/www/html/wp-settings.php ]; then
+            echo 'WordPress files are ready.';
+            break;
+          fi;
+          sleep 5;
+        done;
       fi;
       if [ ! -f /var/www/html/wp-config.php ]; then
         echo 'Creating wp-config.php...';
