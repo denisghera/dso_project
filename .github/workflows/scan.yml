@@ -30,6 +30,20 @@ jobs:
           echo "WordPress did not start in time."
           exit 1
 
+      - name: Wait for plugin install
+        run: |
+          echo "Waiting for wp-cli to install plugins..."
+          for i in {1..30}; do
+            if docker logs docker-wp-cli-1 | grep -q "WP-CLI plugins installed"; then
+              echo "Plugins installed."
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "Plugins were not installed in time."
+          docker logs docker-wp-cli-1 || true
+          exit 1
+
       - name: Run WPScan
         env:
           WPSCAN_API_TOKEN: ${{ secrets.WPSCAN_API_TOKEN }}
@@ -41,7 +55,8 @@ jobs:
             --enumerate u,vp,vt,tt \
             --plugins-detection aggressive \
             --api-token "$WPSCAN_API_TOKEN" \
-            --no-update --force | tee "scans/wpscan-${TS}.txt"
+            --format json --output "scans/wpscan-${TS}.json" \
+            --no-color --no-update --force
 
       - name: Upload scan artifact
         uses: actions/upload-artifact@v4
