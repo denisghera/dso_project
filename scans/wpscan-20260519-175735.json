@@ -1,0 +1,248 @@
+{
+  "banner": {
+    "description": "WordPress Security Scanner by the WPScan Team",
+    "version": "3.8.28",
+    "authors": [
+      "@_WPScan_",
+      "@ethicalhack3r",
+      "@erwan_lr",
+      "@firefart"
+    ],
+    "sponsor": "Sponsored by Automattic - https://automattic.com/"
+  },
+  "start_time": 1779213460,
+  "start_memory": 48861184,
+  "target_url": "http://localhost:8080/",
+  "target_ip": "::1",
+  "effective_url": "http://localhost:8080/",
+  "interesting_findings": [
+    {
+      "url": "http://localhost:8080/",
+      "to_s": "Headers",
+      "type": "headers",
+      "found_by": "Headers (Passive Detection)",
+      "confidence": 100,
+      "confirmed_by": {
+
+      },
+      "references": {
+
+      },
+      "interesting_entries": [
+        "Server: Apache/2.4.67 (Debian)",
+        "X-Powered-By: PHP/8.3.31"
+      ]
+    },
+    {
+      "url": "http://localhost:8080/xmlrpc.php",
+      "to_s": "XML-RPC seems to be enabled: http://localhost:8080/xmlrpc.php",
+      "type": "xmlrpc",
+      "found_by": "Direct Access (Aggressive Detection)",
+      "confidence": 100,
+      "confirmed_by": {
+
+      },
+      "references": {
+        "url": [
+          "http://codex.wordpress.org/XML-RPC_Pingback_API"
+        ],
+        "metasploit": [
+          "auxiliary/scanner/http/wordpress_ghost_scanner",
+          "auxiliary/dos/http/wordpress_xmlrpc_dos",
+          "auxiliary/scanner/http/wordpress_xmlrpc_login",
+          "auxiliary/scanner/http/wordpress_pingback_access"
+        ]
+      },
+      "interesting_entries": [
+
+      ]
+    },
+    {
+      "url": "http://localhost:8080/readme.html",
+      "to_s": "WordPress readme found: http://localhost:8080/readme.html",
+      "type": "readme",
+      "found_by": "Direct Access (Aggressive Detection)",
+      "confidence": 100,
+      "confirmed_by": {
+
+      },
+      "references": {
+
+      },
+      "interesting_entries": [
+
+      ]
+    },
+    {
+      "url": "http://localhost:8080/wp-cron.php",
+      "to_s": "The external WP-Cron seems to be enabled: http://localhost:8080/wp-cron.php",
+      "type": "wp_cron",
+      "found_by": "Direct Access (Aggressive Detection)",
+      "confidence": 60,
+      "confirmed_by": {
+
+      },
+      "references": {
+        "url": [
+          "https://www.iplocation.net/defend-wordpress-from-ddos",
+          "https://github.com/wpscanteam/wpscan/issues/1299"
+        ]
+      },
+      "interesting_entries": [
+
+      ]
+    }
+  ],
+  "version": {
+    "number": "6.9.4",
+    "release_date": "2026-03-11",
+    "status": "latest",
+    "found_by": "Rss Generator (Passive Detection)",
+    "confidence": 100,
+    "interesting_entries": [
+      "http://localhost:8080/?feed=rss2, <generator>https://wordpress.org/?v=6.9.4</generator>",
+      "http://localhost:8080/?feed=comments-rss2, <generator>https://wordpress.org/?v=6.9.4</generator>"
+    ],
+    "confirmed_by": {
+
+    },
+    "vulnerabilities": [
+
+    ]
+  },
+  "main_theme": {
+    "slug": "twentytwentyfive",
+    "location": "http://localhost:8080/wp-content/themes/twentytwentyfive/",
+    "latest_version": "1.4",
+    "last_updated": "2025-12-03T00:00:00.000Z",
+    "outdated": false,
+    "readme_url": "http://localhost:8080/wp-content/themes/twentytwentyfive/readme.txt",
+    "directory_listing": false,
+    "error_log_url": null,
+    "style_url": "http://localhost:8080/wp-content/themes/twentytwentyfive/style.css",
+    "style_name": "Twenty Twenty-Five",
+    "style_uri": "https://wordpress.org/themes/twentytwentyfive/",
+    "description": "Twenty Twenty-Five emphasizes simplicity and adaptability. It offers flexible design options, supported by a variety of patterns for different page types, such as services and landing pages, making it ideal for building personal blogs, professional portfolios, online magazines, or business websites. Its templates cater to various blog styles, from text-focused to image-heavy layouts. Additionally, it supports international typography and diverse color palettes, ensuring accessibility and customization for users worldwide.",
+    "author": "the WordPress team",
+    "author_uri": "https://wordpress.org",
+    "template": null,
+    "license": "GNU General Public License v2 or later",
+    "license_uri": "http://www.gnu.org/licenses/gpl-2.0.html",
+    "tags": "one-column, custom-colors, custom-menu, custom-logo, editor-style, featured-images, full-site-editing, block-patterns, rtl-language-support, sticky-post, threaded-comments, translation-ready, wide-blocks, block-styles, style-variations, accessibility-ready, blog, portfolio, news",
+    "text_domain": "twentytwentyfive",
+    "found_by": "Urls In Homepage (Passive Detection)",
+    "confidence": 4,
+    "interesting_entries": [
+
+    ],
+    "confirmed_by": {
+      "Urls In 404 Page (Passive Detection)": {
+        "confidence": 2,
+        "interesting_entries": [
+
+        ]
+      }
+    },
+    "vulnerabilities": [
+
+    ],
+    "version": {
+      "number": "1.4",
+      "confidence": 80,
+      "found_by": "Style (Passive Detection)",
+      "interesting_entries": [
+        "http://localhost:8080/wp-content/themes/twentytwentyfive/style.css, Match: 'Version: 1.4'"
+      ],
+      "confirmed_by": {
+
+      }
+    },
+    "parents": [
+
+    ]
+  },
+  "plugins": {
+    "akismet": {
+      "slug": "akismet",
+      "location": "http://localhost:8080/wp-content/plugins/akismet/",
+      "latest_version": "5.7",
+      "last_updated": "2026-04-23T22:34:00.000Z",
+      "outdated": false,
+      "readme_url": false,
+      "directory_listing": false,
+      "error_log_url": null,
+      "found_by": "Known Locations (Aggressive Detection)",
+      "confidence": 80,
+      "interesting_entries": [
+        "http://localhost:8080/wp-content/plugins/akismet/, status: 403"
+      ],
+      "confirmed_by": {
+
+      },
+      "vulnerabilities": [
+        {
+          "title": "Akismet 2.5.0-3.1.4 - Unauthenticated Stored Cross-Site Scripting (XSS)",
+          "fixed_in": "3.1.5",
+          "references": {
+            "cve": [
+              "2015-9357"
+            ],
+            "url": [
+              "http://blog.akismet.com/2015/10/13/akismet-3-1-5-wordpress/",
+              "https://blog.sucuri.net/2015/10/security-advisory-stored-xss-in-akismet-wordpress-plugin.html"
+            ],
+            "wpvulndb": [
+              "1a2f3094-5970-4251-9ed0-ec595a0cd26c"
+            ]
+          }
+        }
+      ],
+      "version": null
+    }
+  },
+  "themes": {
+
+  },
+  "timthumbs": {
+
+  },
+  "users": {
+    "admin": {
+      "id": null,
+      "found_by": "Rss Generator (Passive Detection)",
+      "confidence": 100,
+      "interesting_entries": [
+
+      ],
+      "confirmed_by": {
+        "Author Id Brute Forcing - Author Pattern (Aggressive Detection)": {
+          "confidence": 100,
+          "interesting_entries": [
+
+          ]
+        },
+        "Login Error Messages (Aggressive Detection)": {
+          "confidence": 100,
+          "interesting_entries": [
+
+          ]
+        }
+      }
+    }
+  },
+  "vuln_api": {
+    "plan": "free",
+    "requests_done_during_scan": 3,
+    "requests_remaining": 22
+  },
+  "stop_time": 1779213870,
+  "elapsed": 409,
+  "requests_done": 18626,
+  "cached_requests": 13,
+  "data_sent": 5284702,
+  "data_sent_humanised": "5.04 MB",
+  "data_received": 529241452,
+  "data_received_humanised": "504.724 MB",
+  "used_memory": 317149184,
+  "used_memory_humanised": "302.457 MB"
+}

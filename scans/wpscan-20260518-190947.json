@@ -1,0 +1,606 @@
+{
+  "banner": {
+    "description": "WordPress Security Scanner by the WPScan Team",
+    "version": "3.8.28",
+    "authors": [
+      "@_WPScan_",
+      "@ethicalhack3r",
+      "@erwan_lr",
+      "@firefart"
+    ],
+    "sponsor": "Sponsored by Automattic - https://automattic.com/"
+  },
+  "start_time": 1779131393,
+  "start_memory": 48779264,
+  "target_url": "http://localhost:8080/",
+  "target_ip": "::1",
+  "effective_url": "http://localhost:8080/",
+  "interesting_findings": [
+    {
+      "url": "http://localhost:8080/",
+      "to_s": "Headers",
+      "type": "headers",
+      "found_by": "Headers (Passive Detection)",
+      "confidence": 100,
+      "confirmed_by": {
+
+      },
+      "references": {
+
+      },
+      "interesting_entries": [
+        "Server: Apache/2.4.54 (Debian)",
+        "X-Powered-By: PHP/7.4.32"
+      ]
+    },
+    {
+      "url": "http://localhost:8080/xmlrpc.php",
+      "to_s": "XML-RPC seems to be enabled: http://localhost:8080/xmlrpc.php",
+      "type": "xmlrpc",
+      "found_by": "Direct Access (Aggressive Detection)",
+      "confidence": 100,
+      "confirmed_by": {
+
+      },
+      "references": {
+        "url": [
+          "http://codex.wordpress.org/XML-RPC_Pingback_API"
+        ],
+        "metasploit": [
+          "auxiliary/scanner/http/wordpress_ghost_scanner",
+          "auxiliary/dos/http/wordpress_xmlrpc_dos",
+          "auxiliary/scanner/http/wordpress_xmlrpc_login",
+          "auxiliary/scanner/http/wordpress_pingback_access"
+        ]
+      },
+      "interesting_entries": [
+
+      ]
+    },
+    {
+      "url": "http://localhost:8080/readme.html",
+      "to_s": "WordPress readme found: http://localhost:8080/readme.html",
+      "type": "readme",
+      "found_by": "Direct Access (Aggressive Detection)",
+      "confidence": 100,
+      "confirmed_by": {
+
+      },
+      "references": {
+
+      },
+      "interesting_entries": [
+
+      ]
+    },
+    {
+      "url": "http://localhost:8080/wp-cron.php",
+      "to_s": "The external WP-Cron seems to be enabled: http://localhost:8080/wp-cron.php",
+      "type": "wp_cron",
+      "found_by": "Direct Access (Aggressive Detection)",
+      "confidence": 60,
+      "confirmed_by": {
+
+      },
+      "references": {
+        "url": [
+          "https://www.iplocation.net/defend-wordpress-from-ddos",
+          "https://github.com/wpscanteam/wpscan/issues/1299"
+        ]
+      },
+      "interesting_entries": [
+
+      ]
+    }
+  ],
+  "version": {
+    "number": "6.0.3",
+    "release_date": "2022-10-17",
+    "status": "insecure",
+    "found_by": "Rss Generator (Passive Detection)",
+    "confidence": 100,
+    "interesting_entries": [
+      "http://localhost:8080/?feed=rss2, <generator>https://wordpress.org/?v=6.0.3</generator>",
+      "http://localhost:8080/?feed=comments-rss2, <generator>https://wordpress.org/?v=6.0.3</generator>"
+    ],
+    "confirmed_by": {
+
+    },
+    "vulnerabilities": [
+      {
+        "title": "WP <= 6.2 - Unauthenticated Blind SSRF via DNS Rebinding",
+        "fixed_in": null,
+        "references": {
+          "cve": [
+            "2022-3590"
+          ],
+          "url": [
+            "https://blog.sonarsource.com/wordpress-core-unauthenticated-blind-ssrf/"
+          ],
+          "wpvulndb": [
+            "c8814e6e-78b3-4f63-a1d3-6906a84c1f11"
+          ]
+        }
+      },
+      {
+        "title": "WP < 6.2.1 - Directory Traversal via Translation Files",
+        "fixed_in": "6.0.4",
+        "references": {
+          "cve": [
+            "2023-2745"
+          ],
+          "url": [
+            "https://wordpress.org/news/2023/05/wordpress-6-2-1-maintenance-security-release/"
+          ],
+          "wpvulndb": [
+            "2999613a-b8c8-4ec0-9164-5dfe63adf6e6"
+          ]
+        }
+      },
+      {
+        "title": "WP < 6.2.1 - Thumbnail Image Update via CSRF",
+        "fixed_in": "6.0.4",
+        "references": {
+          "url": [
+            "https://wordpress.org/news/2023/05/wordpress-6-2-1-maintenance-security-release/"
+          ],
+          "wpvulndb": [
+            "a03d744a-9839-4167-a356-3e7da0f1d532"
+          ]
+        }
+      },
+      {
+        "title": "WP < 6.2.1 - Contributor+ Stored XSS via Open Embed Auto Discovery",
+        "fixed_in": "6.0.4",
+        "references": {
+          "url": [
+            "https://wordpress.org/news/2023/05/wordpress-6-2-1-maintenance-security-release/"
+          ],
+          "wpvulndb": [
+            "3b574451-2852-4789-bc19-d5cc39948db5"
+          ]
+        }
+      },
+      {
+        "title": "WP < 6.2.2 - Shortcode Execution in User Generated Data",
+        "fixed_in": "6.0.5",
+        "references": {
+          "url": [
+            "https://wordpress.org/news/2023/05/wordpress-6-2-1-maintenance-security-release/",
+            "https://wordpress.org/news/2023/05/wordpress-6-2-2-security-release/"
+          ],
+          "wpvulndb": [
+            "ef289d46-ea83-4fa5-b003-0352c690fd89"
+          ]
+        }
+      },
+      {
+        "title": "WP < 6.2.1 - Contributor+ Content Injection",
+        "fixed_in": "6.0.4",
+        "references": {
+          "url": [
+            "https://wordpress.org/news/2023/05/wordpress-6-2-1-maintenance-security-release/"
+          ],
+          "wpvulndb": [
+            "1527ebdb-18bc-4f9d-9c20-8d729a628670"
+          ]
+        }
+      },
+      {
+        "title": "WP 5.6-6.3.1 - Contributor+ Stored XSS via Navigation Block",
+        "fixed_in": "6.0.6",
+        "references": {
+          "cve": [
+            "2023-38000"
+          ],
+          "url": [
+            "https://wordpress.org/news/2023/10/wordpress-6-3-2-maintenance-and-security-release/"
+          ],
+          "wpvulndb": [
+            "cd130bb3-8d04-4375-a89a-883af131ed3a"
+          ]
+        }
+      },
+      {
+        "title": "WP 5.6-6.3.1 - Reflected XSS via Application Password Requests",
+        "fixed_in": "6.0.6",
+        "references": {
+          "url": [
+            "https://wordpress.org/news/2023/10/wordpress-6-3-2-maintenance-and-security-release/"
+          ],
+          "wpvulndb": [
+            "da1419cc-d821-42d6-b648-bdb3c70d91f2"
+          ]
+        }
+      },
+      {
+        "title": "WP < 6.3.2 - Denial of Service via Cache Poisoning",
+        "fixed_in": "6.0.6",
+        "references": {
+          "url": [
+            "https://wordpress.org/news/2023/10/wordpress-6-3-2-maintenance-and-security-release/"
+          ],
+          "wpvulndb": [
+            "6d80e09d-34d5-4fda-81cb-e703d0e56e4f"
+          ]
+        }
+      },
+      {
+        "title": "WP < 6.3.2 - Subscriber+ Arbitrary Shortcode Execution",
+        "fixed_in": "6.0.6",
+        "references": {
+          "url": [
+            "https://wordpress.org/news/2023/10/wordpress-6-3-2-maintenance-and-security-release/"
+          ],
+          "wpvulndb": [
+            "3615aea0-90aa-4f9a-9792-078a90af7f59"
+          ]
+        }
+      },
+      {
+        "title": "WP < 6.3.2 - Contributor+ Comment Disclosure",
+        "fixed_in": "6.0.6",
+        "references": {
+          "cve": [
+            "2023-39999"
+          ],
+          "url": [
+            "https://wordpress.org/news/2023/10/wordpress-6-3-2-maintenance-and-security-release/"
+          ],
+          "wpvulndb": [
+            "d35b2a3d-9b41-4b4f-8e87-1b8ccb370b9f"
+          ]
+        }
+      },
+      {
+        "title": "WP < 6.3.2 - Unauthenticated Post Author Email Disclosure",
+        "fixed_in": "6.0.6",
+        "references": {
+          "cve": [
+            "2023-5561"
+          ],
+          "url": [
+            "https://wpscan.com/blog/email-leak-oracle-vulnerability-addressed-in-wordpress-6-3-2/",
+            "https://wordpress.org/news/2023/10/wordpress-6-3-2-maintenance-and-security-release/"
+          ],
+          "wpvulndb": [
+            "19380917-4c27-4095-abf1-eba6f913b441"
+          ]
+        }
+      },
+      {
+        "title": "WordPress < 6.4.3 - Deserialization of Untrusted Data",
+        "fixed_in": "6.0.7",
+        "references": {
+          "url": [
+            "https://wordpress.org/news/2024/01/wordpress-6-4-3-maintenance-and-security-release/"
+          ],
+          "wpvulndb": [
+            "5e9804e5-bbd4-4836-a5f0-b4388cc39225"
+          ]
+        }
+      },
+      {
+        "title": "WordPress < 6.4.3 - Admin+ PHP File Upload",
+        "fixed_in": "6.0.7",
+        "references": {
+          "url": [
+            "https://wordpress.org/news/2024/01/wordpress-6-4-3-maintenance-and-security-release/"
+          ],
+          "wpvulndb": [
+            "a8e12fbe-c70b-4078-9015-cf57a05bdd4a"
+          ]
+        }
+      },
+      {
+        "title": "WP < 6.5.2 - Unauthenticated Stored XSS",
+        "fixed_in": "6.0.8",
+        "references": {
+          "url": [
+            "https://wordpress.org/news/2024/04/wordpress-6-5-2-maintenance-and-security-release/"
+          ],
+          "wpvulndb": [
+            "1a5c5df1-57ee-4190-a336-b0266962078f"
+          ]
+        }
+      },
+      {
+        "title": "WordPress < 6.5.5 - Contributor+ Stored XSS in HTML API",
+        "fixed_in": "6.0.9",
+        "references": {
+          "url": [
+            "https://wordpress.org/news/2024/06/wordpress-6-5-5/"
+          ],
+          "wpvulndb": [
+            "2c63f136-4c1f-4093-9a8c-5e51f19eae28"
+          ]
+        }
+      },
+      {
+        "title": "WordPress < 6.5.5 - Contributor+ Stored XSS in Template-Part Block",
+        "fixed_in": "6.0.9",
+        "references": {
+          "url": [
+            "https://wordpress.org/news/2024/06/wordpress-6-5-5/"
+          ],
+          "wpvulndb": [
+            "7c448f6d-4531-4757-bff0-be9e3220bbbb"
+          ]
+        }
+      },
+      {
+        "title": "WordPress < 6.5.5 - Contributor+ Path Traversal in Template-Part Block",
+        "fixed_in": "6.0.9",
+        "references": {
+          "url": [
+            "https://wordpress.org/news/2024/06/wordpress-6-5-5/"
+          ],
+          "wpvulndb": [
+            "36232787-754a-4234-83d6-6ded5e80251c"
+          ]
+        }
+      },
+      {
+        "title": "WP < 6.8.3 - Author+ DOM Stored XSS",
+        "fixed_in": "6.0.11",
+        "references": {
+          "cve": [
+            "2025-58674"
+          ],
+          "url": [
+            "https://patchstack.com/database/wordpress/wordpress/wordpress/vulnerability/wordpress-wordpress-wordpress-6-8-2-cross-site-scripting-xss-vulnerability",
+            " https://wordpress.org/news/2025/09/wordpress-6-8-3-release/"
+          ],
+          "wpvulndb": [
+            "c4616b57-770f-4c40-93f8-29571c80330a"
+          ]
+        }
+      },
+      {
+        "title": "WP < 6.8.3 - Contributor+ Sensitive Data Disclosure",
+        "fixed_in": "6.0.11",
+        "references": {
+          "cve": [
+            "2025-58246"
+          ],
+          "url": [
+            "https://patchstack.com/database/wordpress/wordpress/wordpress/vulnerability/wordpress-wordpress-wordpress-6-8-2-sensitive-data-exposure-vulnerability",
+            "https://wordpress.org/news/2025/09/wordpress-6-8-3-release/"
+          ],
+          "wpvulndb": [
+            "1e2dad30-dd95-4142-903b-4d5c580eaad2"
+          ]
+        }
+      }
+    ]
+  },
+  "main_theme": {
+    "slug": "twentytwentytwo",
+    "location": "http://localhost:8080/wp-content/themes/twentytwentytwo/",
+    "latest_version": "2.1",
+    "last_updated": "2025-12-03T00:00:00.000Z",
+    "outdated": true,
+    "readme_url": "http://localhost:8080/wp-content/themes/twentytwentytwo/readme.txt",
+    "directory_listing": false,
+    "error_log_url": null,
+    "style_url": "http://localhost:8080/wp-content/themes/twentytwentytwo/style.css?ver=1.2",
+    "style_name": "Twenty Twenty-Two",
+    "style_uri": "https://wordpress.org/themes/twentytwentytwo/",
+    "description": "Built on a solidly designed foundation, Twenty Twenty-Two embraces the idea that everyone deserves a truly unique website. The theme’s subtle styles are inspired by the diversity and versatility of birds: its typography is lightweight yet strong, its color palette is drawn from nature, and its layout elements sit gently on the page. The true richness of Twenty Twenty-Two lies in its opportunity for customization. The theme is built to take advantage of the Full Site Editing features introduced in WordPress 5.9, which means that colors, typography, and the layout of every single page on your site can be customized to suit your vision. It also includes dozens of block patterns, opening the door to a wide range of professionally designed layouts in just a few clicks. Whether you’re building a single-page website, a blog, a business website, or a portfolio, Twenty Twenty-Two will help you create a site that is uniquely yours.",
+    "author": "the WordPress team",
+    "author_uri": "https://wordpress.org/",
+    "template": null,
+    "license": "GNU General Public License v2 or later",
+    "license_uri": "http://www.gnu.org/licenses/gpl-2.0.html",
+    "tags": "one-column, custom-colors, custom-menu, custom-logo, editor-style, featured-images, full-site-editing, block-patterns, rtl-language-support, sticky-post, threaded-comments",
+    "text_domain": "twentytwentytwo",
+    "found_by": "Css Style In Homepage (Passive Detection)",
+    "confidence": 100,
+    "interesting_entries": [
+
+    ],
+    "confirmed_by": {
+      "Css Style In 404 Page (Passive Detection)": {
+        "confidence": 70,
+        "interesting_entries": [
+
+        ]
+      }
+    },
+    "vulnerabilities": [
+
+    ],
+    "version": {
+      "number": "1.2",
+      "confidence": 80,
+      "found_by": "Style (Passive Detection)",
+      "interesting_entries": [
+        "http://localhost:8080/wp-content/themes/twentytwentytwo/style.css?ver=1.2, Match: 'Version: 1.2'"
+      ],
+      "confirmed_by": {
+
+      }
+    },
+    "parents": [
+
+    ]
+  },
+  "plugins": {
+    "akismet": {
+      "slug": "akismet",
+      "location": "http://localhost:8080/wp-content/plugins/akismet/",
+      "latest_version": "5.7",
+      "last_updated": "2026-04-23T22:34:00.000Z",
+      "outdated": false,
+      "readme_url": false,
+      "directory_listing": false,
+      "error_log_url": null,
+      "found_by": "Known Locations (Aggressive Detection)",
+      "confidence": 80,
+      "interesting_entries": [
+        "http://localhost:8080/wp-content/plugins/akismet/, status: 403"
+      ],
+      "confirmed_by": {
+
+      },
+      "vulnerabilities": [
+        {
+          "title": "Akismet 2.5.0-3.1.4 - Unauthenticated Stored Cross-Site Scripting (XSS)",
+          "fixed_in": "3.1.5",
+          "references": {
+            "cve": [
+              "2015-9357"
+            ],
+            "url": [
+              "http://blog.akismet.com/2015/10/13/akismet-3-1-5-wordpress/",
+              "https://blog.sucuri.net/2015/10/security-advisory-stored-xss-in-akismet-wordpress-plugin.html"
+            ],
+            "wpvulndb": [
+              "1a2f3094-5970-4251-9ed0-ec595a0cd26c"
+            ]
+          }
+        }
+      ],
+      "version": null
+    },
+    "contact-form-7": {
+      "slug": "contact-form-7",
+      "location": "http://localhost:8080/wp-content/plugins/contact-form-7/",
+      "latest_version": "6.1.6",
+      "last_updated": "2026-05-15T02:55:00.000Z",
+      "outdated": true,
+      "readme_url": "http://localhost:8080/wp-content/plugins/contact-form-7/readme.txt",
+      "directory_listing": false,
+      "error_log_url": null,
+      "found_by": "Known Locations (Aggressive Detection)",
+      "confidence": 80,
+      "interesting_entries": [
+        "http://localhost:8080/wp-content/plugins/contact-form-7/, status: 403"
+      ],
+      "confirmed_by": {
+
+      },
+      "vulnerabilities": [
+        {
+          "title": "Contact Form 7 < 5.8.4 - Authenticated (Editor+) Arbitrary File Upload",
+          "fixed_in": "5.8.4",
+          "references": {
+            "cve": [
+              "2023-6449"
+            ],
+            "url": [
+              "https://www.wordfence.com/threat-intel/vulnerabilities/id/5d7fb020-6acb-445e-a46b-bdb5aaf8f2b6"
+            ],
+            "wpvulndb": [
+              "70e21d9a-b1e6-4083-bcd3-7c1c13fd5382"
+            ]
+          }
+        },
+        {
+          "title": "Contact Form 7 < 5.9.2 - Reflected Cross-Site Scripting",
+          "fixed_in": "5.9.2",
+          "references": {
+            "cve": [
+              "2024-2242"
+            ],
+            "url": [
+              "https://www.wordfence.com/threat-intel/vulnerabilities/id/d5bf4972-424a-4470-a0bc-7dcc95378e0e"
+            ],
+            "wpvulndb": [
+              "1c070a2c-2ab0-43bf-b10b-6575709918bc"
+            ]
+          }
+        },
+        {
+          "title": " Contact Form 7 < 5.9.5 - Unauthenticated Open Redirect",
+          "fixed_in": "5.9.5",
+          "references": {
+            "cve": [
+              "2024-4704"
+            ],
+            "wpvulndb": [
+              "8bdcdb5a-9026-4157-8592-345df8fb1a17"
+            ]
+          }
+        },
+        {
+          "title": "Contact Form 7 < 6.0.6 - Order Replay Vulnerability",
+          "fixed_in": "6.0.6",
+          "references": {
+            "cve": [
+              "2025-3247"
+            ],
+            "url": [
+              "https://www.wordfence.com/threat-intel/vulnerabilities/id/38257dbf-288e-4028-af65-85f5389888ac"
+            ],
+            "wpvulndb": [
+              "7dbafbe2-abbc-4191-a587-afa89c2f7421"
+            ]
+          }
+        }
+      ],
+      "version": {
+        "number": "5.3.2",
+        "confidence": 100,
+        "found_by": "Query Parameter (Passive Detection)",
+        "interesting_entries": [
+          "http://localhost:8080/wp-content/plugins/contact-form-7/includes/css/styles.css?ver=5.3.2",
+          "http://localhost:8080/wp-content/plugins/contact-form-7/includes/js/scripts.js?ver=5.3.2"
+        ],
+        "confirmed_by": {
+          "Readme - Stable Tag (Aggressive Detection)": {
+            "confidence": 80,
+            "interesting_entries": [
+              "http://localhost:8080/wp-content/plugins/contact-form-7/readme.txt"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "themes": {
+
+  },
+  "timthumbs": {
+
+  },
+  "users": {
+    "admin": {
+      "id": null,
+      "found_by": "Rss Generator (Passive Detection)",
+      "confidence": 100,
+      "interesting_entries": [
+
+      ],
+      "confirmed_by": {
+        "Author Id Brute Forcing - Author Pattern (Aggressive Detection)": {
+          "confidence": 100,
+          "interesting_entries": [
+
+          ]
+        },
+        "Login Error Messages (Aggressive Detection)": {
+          "confidence": 100,
+          "interesting_entries": [
+
+          ]
+        }
+      }
+    }
+  },
+  "vuln_api": {
+    "plan": "free",
+    "requests_done_during_scan": 4,
+    "requests_remaining": 11
+  },
+  "stop_time": 1779131887,
+  "elapsed": 493,
+  "requests_done": 18630,
+  "cached_requests": 14,
+  "data_sent": 5285901,
+  "data_sent_humanised": "5.041 MB",
+  "data_received": 456535352,
+  "data_received_humanised": "435.386 MB",
+  "used_memory": 314286080,
+  "used_memory_humanised": "299.727 MB"
+}
