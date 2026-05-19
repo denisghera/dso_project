@@ -1,6 +1,13 @@
-# Automated Vulnerability Discovery & Remediation
+# Automated Vulnerability Discovery & Remediation Pipeline
 
-This repo contains a containerized WordPress lab for vulnerability discovery and remediation. It includes a GitHub Actions workflow that runs WPScan and stores scan output as artifacts.
+This repository contains a complete DevSecOps pipeline for a containerized WordPress lab. It automates vulnerability discovery, applies basic security hardening, publishes a patched image, and verifies the remediation via WPScan.
+
+## Architecture & Remediation
+
+* **Vulnerable Baseline:** The initial environment utilized WordPress 6.0.3 and outdated plugins to simulate a legacy application.
+* **Hardened Image:** The pipeline builds a custom `Dockerfile.hardened` which drops root privileges, removes unnecessary OS packages (e.g., `curl`, `wget`), and uses the latest WordPress core.
+* **Automated Hardening:** The `wp-cli` container dynamically updates plugins, disables XML-RPC, and removes default informational files.
+* **Registries:** The hardened image is automatically pushed to Docker Hub and GitHub Container Registry (GHCR).
 
 ## Quick start (local)
 
@@ -19,7 +26,7 @@ docker compose --env-file .env -f docker/docker-compose.yml up -d --build
 
 3) Check that WordPress and plugins are installed:
 
-Wait for the setup container to finish configuring the environment:
+Wait for the setup container to finish configuring and hardening the environment:
 
 ```bash
 docker logs -f wp-cli-setup
@@ -52,15 +59,19 @@ docker run -it --rm --network host wpscanteam/wpscan \
     --no-update --force
 ```
 
-## GitHub Actions
+## GitHub Actions CI/CD
 
-Add a repository secret named `WPSCAN_API_TOKEN` before running the workflow.
+The automated workflow (`.github/workflows/scan.yml`) builds the hardened image, pushes it to the registries, deploys the stack, and runs an aggressive WPScan.
 
-Workflow path:
+**Required Repository Secrets:**
+Before running the workflow, you must configure the following secrets in your GitHub repository settings:
 
-`.github/workflows/scan.yml`
+* `WPSCAN_API_TOKEN` - Token from wpscan.com
+* `DOCKERHUB_USERNAME` - Your Docker Hub username
+* `DOCKERHUB_TOKEN` - Your Docker Hub access token
 
 ## Notes
 
 * Local secrets are stored in `.env` (ignored by git).
-* Scan output artifacts are saved under `scans/` in CI.
+* Scan output artifacts (JSON format) are saved under `scans/` in CI.
+* The workflow uses the default `GITHUB_TOKEN` to push to GHCR; ensure the workflow has "Read and write permissions" enabled under **Settings > Actions > General > Workflow permissions**.

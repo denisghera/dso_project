@@ -1,4 +1,4 @@
-name: WordPress WPScan
+name: WordPress WPSecOps Pipeline
 
 on:
   push:
@@ -9,30 +9,51 @@ on:
 jobs:
   wpscan:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write # Needed to push to GHCR
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Prepare environment variables
-        run: |
-          cp .env.example .env
+        run: cp .env.example .env
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push hardened image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: docker/Dockerfile.hardened
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/wp-hardened-lab:latest
+            ghcr.io/${{ github.repository_owner }}/wp-hardened-lab:latest
 
       - name: Build and start WordPress
-        run: |
-          docker compose --env-file .env -f docker/docker-compose.yml up -d --build
+        run: docker compose --env-file .env -f docker/docker-compose.yml up -d
 
       - name: Wait for WP-CLI automated setup to complete
         run: |
           echo "Waiting for the wp-cli-setup container to finish..."
           EXIT_CODE=$(docker wait wp-cli-setup)
-          
+
           if [ "$EXIT_CODE" -ne 0 ]; then
-            echo "Setup failed! Fetching logs..."
             docker logs wp-cli-setup
-            docker logs docker-db-1
             exit 1
-          else
-            echo "WordPress and plugins are fully installed!"
           fi
 
       - name: Run WPScan

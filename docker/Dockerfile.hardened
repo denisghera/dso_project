@@ -1,0 +1,22 @@
+# 1. Patch Base Image: Upgrade from 6.0.3 to latest
+FROM wordpress:latest
+
+USER root
+
+# 2. Hardening: Change Apache port to 8080 so a non-root user can bind to it
+RUN sed -i 's/80/8080/g' /etc/apache2/ports.conf /etc/apache2/sites-available/*.conf
+
+# 3. Hardening: Remove unnecessary OS packages that could be used for lateral movement
+RUN apt-get update && \
+    apt-get remove --purge -y curl wget && \
+    apt-get autoremove -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# 4. Hardening: Fix permissions so the non-root user can run the web server
+RUN chown -R www-data:www-data /var/www/html /var/run/apache2 /var/log/apache2 /etc/apache2
+
+# 5. Hardening: Drop root privileges completely
+USER www-data
+
+EXPOSE 8080
